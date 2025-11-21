@@ -1,4 +1,8 @@
-import { use } from "react";
+import { createContext, useContext, useEffect, userState } from 'react';
+import { useLocation } from 'react-route-dom';
+import PropTypes from 'prop-types';
+import api from '../services/api';
+import { getCoordinacionByUserId } from '../services/usuarios_coordinacion';
 
 const AuthContext = createContext();
 
@@ -57,4 +61,9 @@ export const AuthProvider = ({ children }) => {
         </AuthContext.Provider>
     );
 
+    AuthProvider.propTypes = {
+        children: PropTypes.node.isRequired,
+    };
 };
+
+  export const useAuth = () => useContext(AuthContext);
