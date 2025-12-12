@@ -27,4 +27,36 @@ export const getPersonalizacion = (id) => axiosInstance.get(`/personalizaciones/
 export const getCarritos = () => axiosInstance.get('/carritos');
 export const getCarrito = (id) => axiosInstance.get(`/carritos/${id}`);
 
+// Authentication helpers
+export const setAuthToken = (token) => {
+  if (token) {
+    axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    localStorage.setItem('token', token);
+  } else {
+    delete axiosInstance.defaults.headers.common['Authorization'];
+    localStorage.removeItem('token');
+  }
+};
+
+// Initialize token from storage (useful on page reload)
+const storedToken = localStorage.getItem('token');
+if (storedToken) {
+  axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
+}
+
+// Global response interceptor to handle auth errors
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const status = error?.response?.status;
+    if (status === 401) {
+      // Token invalid or expired; clear token and force login
+      setAuthToken(null);
+      // Redirect to login page
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
+
 

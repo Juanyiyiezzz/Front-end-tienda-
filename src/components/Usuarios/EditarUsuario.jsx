@@ -2,11 +2,17 @@ import { useEffect, useState } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 
 const EditarUsuario = ({ usuario, onGuardar, onClose }) => {
-  const [form, setForm] = useState(usuario || { nombre: '', email: '', rol: 'Cliente' });
+  const [form, setForm] = useState({ nombre: '', email: '', rol: 'Cliente' });
 
   useEffect(() => {
     if (usuario) {
-      setForm(usuario);
+      // Normalize backend fields (correo) to form's `email`
+      setForm({
+        nombre: usuario.nombre || usuario.name || '',
+        email: usuario.correo || usuario.email || '',
+        rol: usuario.rol || 'Cliente',
+        id: usuario.id_usuario || usuario.id,
+      });
     }
   }, [usuario]);
 
@@ -17,7 +23,13 @@ const EditarUsuario = ({ usuario, onGuardar, onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onGuardar(form);
+    // Map email -> correo to match backend expectations
+    const payload = {
+      ...form,
+      correo: form.email,
+    };
+    delete payload.email;
+    onGuardar(payload);
   };
 
   return (

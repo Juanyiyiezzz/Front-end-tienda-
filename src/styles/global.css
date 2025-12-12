@@ -1,5 +1,8 @@
 body {
-  background-color: #f5f6fa;
+  --primary: #0d6efd; /* azul */
+  --primary-dark: #0a58ca;
+  --muted: #f5f6fa;
+  background-color: var(--muted);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
@@ -9,6 +12,56 @@ body {
   align-items: center;
   justify-content: center;
 }
+
+.login-bg {
+  background: linear-gradient(180deg, rgba(13,110,253,0.06), rgba(13,110,253,0.02));
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(13,110,253,0.12);
+  overflow: hidden;
+}
+
+.login-card .card-body {
+  background: linear-gradient(180deg,#fff,#f8fbff);
+  padding: 2rem;
+}
+
+.login-title {
+  color: var(--primary-dark);
+  font-weight: 700;
+  text-align: center;
+}
+
+.btn-primary.custom {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.login-illustration {
+  background: linear-gradient(135deg, rgba(13,110,253,0.12), rgba(0,123,255,0.04));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height: 160px;
+}
+
+.home-hero {
+  background: white;
+  border-radius: 12px;
+  padding: 3rem;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+  text-align: left;
+}
+
+.home-hero h1 { color: var(--primary-dark); }
+.home-hero p { color: #4b5563; }
 
 .dashboard-layout {
   min-height: 100vh;
