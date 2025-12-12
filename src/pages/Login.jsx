@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Card, Form, Button, Alert } from 'react-bootstrap';
+import axiosInstance from '../services/api';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -14,9 +15,30 @@ const Login = () => {
       setError('Por favor completa todos los campos.');
       return;
     }
-    // Aquí iría la lógica real de autenticación
-    setError('');
-    navigate('/dashboard');
+
+    // Llamada al backend
+    const doLogin = async () => {
+      try {
+        // Enviar `contrasena` (sin ñ) y `contraseña` por compatibilidad
+        const body = { correo: email, contrasena: password, contraseña: password };
+        const res = await axiosInstance.post('/login', body);
+        const data = res.data;
+        if (data.token) {
+          // Guardar token y configurar header por defecto
+          localStorage.setItem('token', data.token);
+          axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
+          setError('');
+          navigate('/dashboard');
+        } else {
+          setError(data.message || 'Error en autenticación');
+        }
+      } catch (err) {
+        const msg = err.response?.data?.message || err.message || 'Error en la solicitud';
+        setError(msg);
+      }
+    };
+
+    doLogin();
   };
 
   return (
